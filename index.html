@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine 💖</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffe6f0, #fff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(255,105,180,.35);
+    width: 90%;
+    max-width: 340px;
+}
+
+h1 { color:#ff4d88; }
+p { color:#777; }
+
+button {
+    border:none;
+    padding:12px 26px;
+    border-radius:30px;
+    font-size:16px;
+    margin:10px;
+    cursor:pointer;
+}
+
+#yesBtn { background:#ff4d88; color:white; }
+#noBtn { background:#f2f2f2; position:absolute; }
+
+.slideshow img {
+    width:100%;
+    border-radius:15px;
+    animation: zoom 4s infinite;
+}
+@keyframes zoom {
+    50% { transform: scale(1.05); }
+}
+
+.final-message {
+    display:none;
+    font-size:20px;
+    color:#ff4d88;
+}
+
+.countdown {
+    margin-top:10px;
+    font-size:14px;
+    color:#ff4d88;
+}
+
+.popup {
+    position:fixed;
+    bottom:20px;
+    background:#ffebf3;
+    padding:10px 18px;
+    border-radius:20px;
+    box-shadow:0 10px 20px rgba(0,0,0,.15);
+    animation: slideUp 3s forwards;
+}
+@keyframes slideUp {
+    from {opacity:0; transform:translateY(30px);}
+    to {opacity:1; transform:translateY(0);}
+}
+
+.heart {
+    position:fixed;
+    animation: fall 4s linear forwards;
+}
+@keyframes fall {
+    to { transform:translateY(100vh); opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" src="music.mp3"></audio>
+
+<div class="card">
+    <h1>Will you be my Valentine? 💘</h1>
+
+    <p>
+        ❤️ <strong>Rashi</strong> ❤️ <br>
+        From <strong>Ashik</strong>
+    </p>
+
+    <div class="countdown" id="countdown"></div>
+
+    <button id="yesBtn">YES 💖</button>
+    <button id="noBtn">No 😜</button>
+
+    <div class="slideshow" id="slide">
+        <img id="img" src="photos1/1.jpg">
+    </div>
+
+    <div class="final-message" id="finalMsg">
+        💕 I already knew you’d say YES 💕<br>
+        Happy Valentine’s Day ❤️
+    </div>
+</div>
+
+<script>
+/* MUSIC */
+document.body.addEventListener("click", () => {
+    document.getElementById("music").play();
+}, { once:true });
+
+/* COUNTDOWN */
+const valentine = new Date("Feb 14, 2026 00:00:00").getTime();
+setInterval(() => {
+    const now = new Date().getTime();
+    const d = valentine - now;
+    document.getElementById("countdown").innerHTML =
+        d > 0 ? `⏳ ${Math.floor(d/86400000)} days to Valentine 💝` : "💖 It's Valentine’s Day 💖";
+}, 1000);
+
+/* NO BUTTON */
+let noClicks = 0;
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+
+function moveNo(){
+    noClicks++;
+    noBtn.style.left = Math.random()*80 + "%";
+    noBtn.style.top = Math.random()*80 + "%";
+    if(noClicks>=5) noBtn.style.display="none";
+}
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("click", moveNo);
+
+/* SLIDESHOW */
+let i=1, folder=1;
+setInterval(()=>{
+    i = i%3+1;
+    document.getElementById("img").src = `photos${folder}/${i}.jpg`;
+},2500);
+
+/* WHY I LOVE YOU POPUPS */
+const reasons = [
+    "I love your smile 💖",
+    "You make my life brighter ✨",
+    "You understand me 🥰",
+    "You are my safe place ❤️",
+    "You are my forever 💍"
+];
+
+setInterval(()=>{
+    const pop=document.createElement("div");
+    pop.className="popup";
+    pop.style.left=Math.random()*60+"%";
+    pop.innerText=reasons[Math.floor(Math.random()*reasons.length)];
+    document.body.appendChild(pop);
+    setTimeout(()=>pop.remove(),3000);
+},6000);
+
+/* YES CLICK */
+yesBtn.onclick=()=>{
+    document.querySelector("h1").style.display="none";
+    document.querySelector("p").style.display="none";
+    yesBtn.style.display="none";
+    noBtn.style.display="none";
+    folder=2;
+
+    setTimeout(()=>{
+        document.getElementById("slide").style.display="none";
+        document.getElementById("finalMsg").style.display="block";
+        hearts();
+    },8000);
+};
+
+/* HEART CONFETTI */
+function hearts(){
+    setInterval(()=>{
+        const h=document.createElement("div");
+        h.className="heart";
+        h.innerHTML="💖";
+        h.style.left=Math.random()*100+"vw";
+        h.style.top="-10px";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),4000);
+    },300);
+}
+</script>
+
+</body>
+</html>
